@@ -3,14 +3,21 @@ import WallService.postsAny
 import WallService.sizeOfPosts
 import WallService.update
 
-
 fun main() {
-    val photo = Attachment.Photo(id = 22, ownerId = 22, photo130 = "link1", photo604 = "link2")
+    val photo = Attachment.Photo(id = 22, ownerId = 22, photo604 = " link to the photo")
     val video = Attachment.Video(id = 33, ownerId = 33, duration = 10)
-    val audio = Attachment.Audio(id = 44, ownerId = 44, title = "Audio", url = "link3")
+    val audio = Attachment.Audio(id = 44, ownerId = 44, title = " New audio", url = " link to the audio")
 
-    val postIni = Post(0, likes = Post.Likes(10), attachments = listOf(photo, video, audio))
-    postIni.showDataPost()
+    val photoAttachment = Attachment.PhotoAttachment(photo)
+    val videoAttachment = Attachment.VideoAttachment(video)
+    val audioAttachment = Attachment.AudioAttachment(audio)
+    println("type = ${photoAttachment.type}, ${photoAttachment.photo}")
+    println("type = ${videoAttachment.type}, ${videoAttachment.video}")
+    println("type = ${audioAttachment.type}, ${audioAttachment.audio}")
+
+
+    val postIni = Post(0, likes = Post.Likes(10), attachments = listOf(photoAttachment, videoAttachment, audioAttachment))
+    //postIni.showDataPost()
 
     add(postIni)
     add(postIni)
@@ -25,30 +32,39 @@ fun main() {
     println(update(sample))
 }
 
-abstract class Attachment(val type: String) {
+abstract class Attachment(open val type: String) {
 
     data class Photo(
         val id: Int = 1,
         val ownerId: Int = 1,
-        val photo130: String = "some link to the object",
-        val photo604: String = "another link to the object"
-    ) : Attachment("photo")
+        val photo130: String = " some link to the object",
+        val photo604: String = " another link to the object"
+    )
+
+    data class PhotoAttachment(
+        val photo: Photo
+    ) : Attachment("photo"){}
 
     data class Video(
         val id: Int = 1,
         val ownerId: Int = 1,
-        val title: String = "A Funny Video",
+        val title: String = " A Funny Video",
         val duration: Int = 30
-    ) : Attachment("video")
+    )
+
+    data class VideoAttachment(val video: Video) : Attachment("video")
 
     data class Audio(
         val id: Int = 1,
         val ownerId: Int = 1,
-        val artist: String = "Names of artists",
-        val title: String = "Title of audio",
+        val artist: String = " Names of artists",
+        val title: String = " Title of audio",
         val duration: Int = 5,
-        val url: String = "link to the object"
-    ) : Attachment("audio")
+        val url: String = " link to the object"
+    )
+
+    data class AudioAttachment(val audio: Audio) : Attachment("audio")
+
 }
 
 data class Post(
